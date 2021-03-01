@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import { View ,StyleSheet,Text, TextInput, ScrollView, TouchableOpacity,Dimensions} from 'react-native'
+import { View ,StyleSheet,Text, TextInput, ScrollView, TouchableOpacity,Dimensions,} from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
+
+
 
 import LinearGradient from 'react-native-linear-gradient'
 import { color } from 'react-native-reanimated';
@@ -8,6 +11,73 @@ const { Width } = Dimensions.get('window').width
 
 
 export default class Login extends Component{
+    constructor({navigation}){
+        super()
+        
+        this.state={
+            userEmail:'',
+            password:'',
+            data:null,
+            buttonDisable:false
+        }
+    };
+    // koolswans@gmail.com SwAn@007
+    //valueChange=(a)=>{
+    //     this.setState({[a.target.name]:a.target.value})
+        
+    //     console.log(a.value)
+    // };
+    
+    getMoviesFromApiAsync = async () => {
+        if(this.state.userEmail==''||this.state.password==''){
+            alert('Please put your User or Password')
+        }else{
+            this.setState({buttonDisable:true})
+        this.state.data={
+           email:this.state.userEmail,
+           password:this.state.password
+        }
+    
+        console.log(this.state.data)
+
+        try{ 
+           
+         fetch('https://feotlotto.creatorshadow.com/api/login',
+         {
+            headers:{  
+            'Content-Type': 'application/json',
+            Accept:'application/json'
+            },
+           method:'POST',
+           body:JSON.stringify(this.state.data)
+       })
+         .then(res=>res.json())
+         .then(result=>{
+            if(result.status==200){
+                
+                AsyncStorage.setItem('token',result.access_token)
+                console.log(AsyncStorage.getItem('token'))
+
+                this.setState({buttonDisable:false})
+            }else{
+                alert(result.message)
+                this.setState({buttonDisable:false})
+            }})
+         .catch(error=>
+            {
+                alert(error)
+                this.setState({buttonDisable:false})
+            })
+       }
+       catch(error){
+        alert(error)
+        this.setState({buttonDisable:false})
+       }
+    }
+    }
+       
+     
+     
     render(){
         return(
             <LinearGradient colors={['#150448','#DC0000']} style={styles.wrapper}>
@@ -17,24 +87,41 @@ export default class Login extends Component{
                 </View>
                 <Text style={styles.heading}>Please login to play Online games</Text>
                 <View style={styles.formWrapper}>
-                    <TextInput style={styles.input} placeholder='User Name' placeholderTextColor='rgba(255, 255, 255, 0.6)'/>
-                    <TextInput style={styles.input} placeholder='Password' placeholderTextColor='rgba(255, 255, 255, 0.6)'/>
+                    <TextInput 
+                        textContentType='emailAddress' 
+                        style={styles.input} 
+                        placeholder='User Name' 
+                        placeholderTextColor='rgba(255, 255, 255, 0.6)' 
+                        value={this.state.userEmail} 
+                        onChangeText={e=>this.setState({userEmail:e})}
+                    />
+                    <TextInput 
+                        textContentType='password' 
+                        secureTextEntry={true} 
+                        style={styles.input} 
+                        placeholder='Password' 
+                        placeholderTextColor='rgba(255, 255, 255, 0.6)' 
+                        value={this.state.password} 
+                        onChangeText={e=>this.setState({password:e})}
+                    />
                 </View>
                 <View style={styles.loginrow}>
                     <View style={styles.left}>
-                    <TouchableOpacity><Text style={styles.forgotbutton}>Forgot Password?</Text></TouchableOpacity>
+                    <TouchableOpacity disabled={this.state.buttonDisable}><Text style={styles.forgotbutton} onPress={()=>this.props.navigation.navigate('forget-password')}>Forgot Password?</Text></TouchableOpacity>
                     </View>
                     <View style={styles.right}>
                     <LinearGradient colors={['#D01729','#F55150','#D01729',]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}>
-                        <TouchableOpacity style={styles.submitbutton}>
-                            <Text style={styles.submittext}>Login</Text>
+                        <TouchableOpacity style={styles.submitbutton} onPress={this.getMoviesFromApiAsync} disabled={this.state.buttonDisable}>
+                            <Text style={styles.submittext} 
+                            //onPress={()=>this.props.navigation.navigate('dashboard')}
+                            >Login</Text>
                         </TouchableOpacity>
                     </LinearGradient>
                     </View>
                 </View>
-                <View style={styles.lastnote}>
-                    <Text style={styles.lastnotetext}>Don't have any account? Sign in now</Text>
-                </View>
+                <TouchableOpacity style={styles.lastnote} disabled={this.state.buttonDisable}>
+                    <Text style={styles.lastnotetext} onPress={()=>this.props.navigation.navigate('registration') }>Don't have any account? Sign up now</Text>
+                </TouchableOpacity>
                 
                 </ScrollView>
             </LinearGradient>
@@ -64,10 +151,10 @@ const styles = StyleSheet.create({
     input:{
         height:50,
         borderColor:'rgba(255, 255, 255, 0.6)',
-        color:'rgba(255, 255, 255, 0.6)',
+        color:'#ffffff',
         borderWidth:1,
         margin:8,
-        fontSize:14,
+        fontSize:20,
         paddingRight:20,
         paddingLeft:20,
 
@@ -93,12 +180,8 @@ const styles = StyleSheet.create({
         
     },
     forgotbutton:{
-        //width:'50%',
         fontSize:20,
         color:'#ffffff',
-        justifyContent:'center'
-        
-
     },
     submittext:{
         alignSelf:'center',
@@ -120,7 +203,9 @@ const styles = StyleSheet.create({
     },
     left:{
         width:'50%',
-        alignContent:'flex-start'
+        alignContent:'flex-start',
+        height:50,
+        justifyContent:'center'
     },right:{
         width:'50%',
         alignContent:'flex-end'

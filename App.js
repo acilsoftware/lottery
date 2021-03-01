@@ -1,10 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+
 
 import React, { Component } from 'react';
 import {StyleSheet} from 'react-native';
@@ -18,27 +12,50 @@ import EmailVerification from './components/emailverification'
 import Customdrawer from './components/customdrawer'
 import Splesh from './components/splesh'
 import ProfileUpdate from './components/profile-update'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
 
 export default class App extends Component{
+  constructor(){
+    super()
+    this.state={
+      loginToken:null,
+    }
+  }
+ componentWillUnmount(){
+  const Token=AsyncStorage.getItem('token')
+  this.setState([loginToken],Token)
+
+ }
   render(){
-  return (
+  {if(this.state.loginToken==null){
+    return(
     <NavigationContainer>
-      <Stack.Navigator headerMode='none' initialRouteName='profileUpdate'>
+      <Stack.Navigator headerMode='none' initialRouteName='login'>
         <Stack.Screen name="registration" component={Registration} />
         <Stack.Screen name="forget-password" component={ForgetPassword} />
         <Stack.Screen name="login" component={Login} />
+        <Stack.Screen name="splesh" component={Splesh}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+    )
+  }else{
+    return(
+
+    <NavigationContainer>
+      <Stack.Navigator headerMode='none' initialRouteName='login'>
         <Stack.Screen name="choose-number" component={ChooseNumber} />
         <Stack.Screen name="emailverifcation" component={EmailVerification} />
         <Stack.Screen name="customdrawer" component={Customdrawer}/>
         <Stack.Screen name="splesh" component={Splesh}/>
         <Stack.Screen name="profileUpdate" component={ProfileUpdate}/>
-
-
       </Stack.Navigator>
     </NavigationContainer>
-  )}
+    )
+  }}
+    
+  }
 };
 
 const styles = StyleSheet.create({

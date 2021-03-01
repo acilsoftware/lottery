@@ -33,10 +33,10 @@ export default class Login extends Component{
             alert('Please put your User or Password')
         }else{
             this.setState({buttonDisable:true})
-        this.state.data={
-           email:this.state.userEmail,
-           password:this.state.password
-        }
+            this.state.data={
+                email:this.state.userEmail,
+                password:this.state.password
+            }
     
         console.log(this.state.data)
 
@@ -57,20 +57,27 @@ export default class Login extends Component{
                 
                 AsyncStorage.setItem('token',result.access_token)
                 console.log(AsyncStorage.getItem('token'))
-
+                console.log('200'+this.state.buttonDisable)
                 this.setState({buttonDisable:false})
             }else{
                 alert(result.message)
+                console.log('other-res'+this.state.buttonDisable)
+
                 this.setState({buttonDisable:false})
-            }})
+            }
+        })
          .catch(error=>
             {
-                alert(error)
+                console.log(error)
+                console.log('error'+this.state.buttonDisable)
+
                 this.setState({buttonDisable:false})
             })
        }
        catch(error){
-        alert(error)
+        console.log(error)
+        console.log('tryerror'+this.state.buttonDisable)
+
         this.setState({buttonDisable:false})
        }
     }

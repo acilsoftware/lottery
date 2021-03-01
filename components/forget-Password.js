@@ -6,6 +6,12 @@ import { color } from 'react-native-reanimated';
 const { Height } = Dimensions.get('window').height
 
 export default class ForgetPassword extends Component{
+    constructor({navigation}){
+        super({navigation})
+        this.state={
+
+        }
+    }
     render(){
         return(
             
@@ -21,11 +27,11 @@ export default class ForgetPassword extends Component{
                 </View>
                 <LinearGradient colors={['#D01729','#F55150','#D01729',]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}>
                     <TouchableOpacity style={styles.submitbutton}>
-                        <Text style={styles.submittext}>Sign Up</Text>
+                        <Text style={styles.submittext}>Submit</Text>
                     </TouchableOpacity>
                 </LinearGradient>
                 <View style={styles.lastnote}>
-                    <Text style={styles.lastnotetext}>Don't have any account? Sign in now</Text>
+                    <Text style={styles.lastnotetext} onPress={()=>this.props.navigation.navigate('registration')}>Don't have any account? Sign up now</Text>
                 </View>
                 </ScrollView>
 

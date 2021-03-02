@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View ,StyleSheet,Text, TextInput, ScrollView, CheckBox, Picker, Touchable, TouchableOpacity,Dimensions} from 'react-native'
+import { View ,StyleSheet,Text, TextInput, ScrollView, TouchableOpacity,Dimensions} from 'react-native'
 
 import LinearGradient from 'react-native-linear-gradient'
 import { color } from 'react-native-reanimated';
@@ -14,7 +14,6 @@ export default class ForgetPassword extends Component{
     }
     render(){
         return(
-            
             <LinearGradient colors={['#150448','#DC0000']} style={styles.wrapper}>
                 <ScrollView contentContainerStyle={styles.outer}> 
                 <View style={styles.logo}>
@@ -25,7 +24,7 @@ export default class ForgetPassword extends Component{
                 <View style={styles.formWrapper}>
                     <TextInput style={styles.input} placeholder='User Name' placeholderTextColor='rgba(255, 255, 255, 0.6)'/>
                 </View>
-                <LinearGradient colors={['#D01729','#F55150','#D01729',]} start={{x: 0, y: 0}} end={{x: 1, y: 0}}>
+                <LinearGradient colors={['#D01729','#F55150','#D01729']} start={{x: 0, y: 0}} end={{x: 1, y: 0}}>
                     <TouchableOpacity style={styles.submitbutton}>
                         <Text style={styles.submittext}>Submit</Text>
                     </TouchableOpacity>
@@ -34,7 +33,6 @@ export default class ForgetPassword extends Component{
                     <Text style={styles.lastnotetext} onPress={()=>this.props.navigation.navigate('registration')}>Don't have any account? Sign up now</Text>
                 </View>
                 </ScrollView>
-
             </LinearGradient>
         )
     }

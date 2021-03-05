@@ -1,54 +1,59 @@
 import React, { Component } from 'react'
+import { useContext } from 'react';
 import { View ,StyleSheet,Text, TextInput, ScrollView, TouchableOpacity,Dimensions, Image} from 'react-native'
+import LoginLogout from '../services/contextLoginLogout'
 
 import LinearGradient from 'react-native-linear-gradient'
 import { color } from 'react-native-reanimated';
 const { Height } = Dimensions.get('window').height
 const { Width } = Dimensions.get('window').width
 
-export default class Customdrawer extends Component{
-    render(){
+
+export default function Customdrawer({navigation},props){
+    
+    const {signOut}=useContext(LoginLogout)
+    
         return(
             
                 <LinearGradient colors={['#150448','#DC0000']} style={styles.wrapper}>
                     <ScrollView contentContainerStyle={styles.outer}> 
                         <View style={styles.drawerwrapper}>
                             <View style={styles.head}>
-                                <View style={styles.closebuttonbox}>
+                                <TouchableOpacity style={styles.closebuttonbox} onPress={() => navigation.toggleDrawer()}>
                                     <Image style={styles.closebutton} source={require('../assets/images/closebutton.gif')}/>
-                                </View>
+                                </TouchableOpacity>
                                 <View style={styles.profileImagebox}>
                                     <Image style={styles.profileImage} source={require('../assets/images/profileimage.gif')}/>
                                     <Text style={styles.customerName}>Jack Maris</Text>
                                     <Text style={styles.customerid}>@jack.maris90</Text>
 
                                 </View>
-                                <View style={styles.editbuttonbox}>
+                                <TouchableOpacity style={styles.editbuttonbox} onPress={()=>navigation.navigate('profileUpdate')}>
                                     <Image style={styles.editbutton} source={require('../assets/images/editbutton.gif')}/>
-                                </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={styles.line}></View>
-                        <View style={styles.menubar}>
+                        <TouchableOpacity style={styles.menubar}>
                             <Text style={styles.menuName}>Dashboard</Text>
-                        </View>
-                        <View style={styles.menubar}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menubar}>
                             <Text style={styles.menuName}>Profile</Text>
-                        </View>
-                        <View style={styles.menubar}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menubar}>
                             <Text style={styles.menuName}>Deposite Funds</Text>
-                        </View>
-                        <View style={styles.menubar}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menubar}>
                             <Text style={styles.menuName}>Choose Your Number</Text>
-                        </View>
-                        <View style={styles.menubar}>
-                            <Text style={styles.menuName}>Logout</Text>
-                        </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menubar} onPress={signOut()}>
+                            <Text style={styles.menuName} onPress={()=>navigation.navigate('login')}>Logout</Text>
+                        </TouchableOpacity>
                     </ScrollView>
                 </LinearGradient>
         )
     }
-}
+
 const styles = StyleSheet.create({
     outer:{
         flex:1,
@@ -56,7 +61,7 @@ const styles = StyleSheet.create({
     wrapper:{
         flex:1,
         
-        width:'80%',
+        width:'100%',
     },
     drawerwrapper:{
         
